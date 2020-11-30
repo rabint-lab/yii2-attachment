@@ -124,12 +124,12 @@ class UploadAction extends Action
             $newFiles = \rabint\helpers\collection::rotateArray($_FILES[$this->inputName]);
 //            $_FILES[$this->inputName] = $newFiles[0];
             $files = UploadedFile::getInstancesByName($this->inputName);
+        }else{
+            $files[] = UploadedFile::getInstanceByName($this->inputName);
         }
-        $files[] = UploadedFile::getInstanceByName($this->inputName);
 
         $returnErrors = $returnFiles = [];
         foreach ($files as $i=>$file) {
-
             if (!$file) {
 //            var_dump($_FILES);
 //            var_dump($file->error);
