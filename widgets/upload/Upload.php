@@ -48,6 +48,12 @@ class Upload extends InputWidget {
      * @var bool
      */
     public $sortable = false;
+    
+    /**
+     * @var bool
+     */
+    public $editable = true;
+    
 
     /**
      * @var int min file size in bytes
@@ -114,6 +120,7 @@ class Upload extends InputWidget {
                     'minFileSize' => $this->minFileSize,
                     'acceptFileTypes' => $this->acceptFileTypes,
                     'files' => $this->files,
+                    'editable' => $this->editable,
                     'messages' => [
                         'maxNumberOfFiles' => Yii::t('rabint', 'Maximum number of files exceeded'),
                         'acceptFileTypes' => Yii::t('rabint', 'File type not allowed'),
