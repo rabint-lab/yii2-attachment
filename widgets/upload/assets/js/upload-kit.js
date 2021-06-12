@@ -56,6 +56,7 @@
                     messages: options.messages,
                     process: true,
                     getNumberOfFiles: methods.getNumberOfFiles,
+                    editable:options.editable,
                     start: function (e, data) {
                         $container.find('.upload-kit-input')
                                 .removeClass('error')
@@ -180,9 +181,11 @@
                                 .append($('<input/>', {"name": name + '[base_url]', "value": file.base_url, "type": "hidden"}));
                     default:
                 }
-                item.append($('<span/>', {"class": "name", "title": file.name}))
-                        .append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}))
-                        .append($('<span/>', {"class": "fas fa-arrow-circle-down dl", "data-url": '/attachement/default/download?id='+file.attachment_id}));
+                item.append($('<span/>', {"class": "name", "title": file.name}));
+                if(options.editable)
+                        item.append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}));
+                    
+                item.append($('<span/>', {"class": "fas fa-arrow-circle-down dl", "data-url": '/attachement/default/download?id='+file.attachment_id}));
                 if (!file.type || file.type.search(/image\/.*/g) !== -1) {
                     item.removeClass('not-image').addClass('image');
                     item.prepend($('<img/>', {src: file.base_url + '/' + file.path}));
