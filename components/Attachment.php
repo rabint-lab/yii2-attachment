@@ -45,7 +45,6 @@ class attachment extends Component
     public function init()
     {
         parent::init();
-
         $this->registerTranslations();
     }
 

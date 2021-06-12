@@ -9,6 +9,8 @@ use yii\widgets\DetailView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('rabint', 'Attachments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+pr(123,1);
+
 ?>
 <div class="attachment-view">
 

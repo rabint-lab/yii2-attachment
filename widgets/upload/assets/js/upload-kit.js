@@ -32,6 +32,7 @@
                                 '</li>'
                                 );
                 $files.on('click', '.upload-kit-item .remove', methods.removeItem);
+                $files.on('click', '.upload-kit-item .download', methods.downloadItem);
                 methods.checkInputVisibility();
                 methods.fileuploadInit();
                 methods.dragInit();
@@ -144,6 +145,12 @@
                 methods.handleEmptyValue();
                 methods.checkInputVisibility();
             },
+            downloadItem: function (e) {
+                var $this = $(this);
+                var url = $this.data('url');
+                window.open(url, '_blank');
+                
+            },
             createItem: function (file) {
 
                 var name = options.name;
@@ -174,7 +181,8 @@
                     default:
                 }
                 item.append($('<span/>', {"class": "name", "title": file.name}))
-                        .append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}));
+                        .append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}))
+                        .append($('<span/>', {"class": "fas fa-arrow-circle-down dl", "data-url": '/attachement/default/download?id='+file.attachment_id}));
                 if (!file.type || file.type.search(/image\/.*/g) !== -1) {
                     item.removeClass('not-image').addClass('image');
                     item.prepend($('<img/>', {src: file.base_url + '/' + file.path}));

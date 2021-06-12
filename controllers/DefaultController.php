@@ -166,6 +166,14 @@ class DefaultController extends \rabint\controllers\DefaultController {
         }
         die('0');
     }
+    
+//    public function actionDownload($id) {
+//        $model = $this->findModel($id);
+//        $file = $model->path;
+//        if (file_exists($file)) {
+//            Yii::$app->response->sendFile($file);
+//         }
+//    }
 
     /**
      * Finds the Attachment model based on its primary key value.

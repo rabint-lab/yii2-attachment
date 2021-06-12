@@ -27,7 +27,9 @@
 .upload-kit .upload-kit-input .add,
 .upload-kit .upload-kit-item .add,
 .upload-kit .upload-kit-input .remove,
-.upload-kit .upload-kit-item .remove {
+.upload-kit .upload-kit-item .remove,
+.upload-kit .upload-kit-input .download,
+.upload-kit .upload-kit-item .download{
     display: block;
     position: absolute;
 }
@@ -89,7 +91,26 @@
 .upload-kit .upload-kit-item.ui-sortable-helper .remove {
     display: none !important;
 }
+.upload-kit .upload-kit-item.ui-sortable-helper .download {
+    display: none !important;
+}
 .upload-kit .upload-kit-item .remove {
+    display: none;
+    cursor: pointer;
+    font-size: 3em;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 4px;
+    border-radius: 5px;
+    color: #FFF;
+    margin-top: -0.5em;
+}
+.upload-kit .upload-kit-item .download {
     display: none;
     cursor: pointer;
     font-size: 3em;
@@ -136,6 +157,9 @@
     border-radius: 0 0 7px 7px;
 }
 .upload-kit .upload-kit-item.done:hover .remove {
+    display: block;
+}
+.upload-kit .upload-kit-item.done:hover .download {
     display: block;
 }
 .upload-kit:before,
