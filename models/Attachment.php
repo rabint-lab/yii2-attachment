@@ -232,7 +232,9 @@ class Attachment extends AttachmentBase
 
     public static function getUploaderFileAttribute($value)
     {
+        if($value=='' or $value == null) return null;
         if (is_numeric($value)) {
+            
             $file = static::findOne($value);
             if ($file == null) {
                 return null;
