@@ -36,6 +36,9 @@
                 methods.checkInputVisibility();
                 methods.fileuploadInit();
                 methods.dragInit();
+                if(!options.editable){
+                    methods.disableFileUploader();
+                }
                 if (options.acceptFileTypes && !(options.acceptFileTypes instanceof RegExp)) {
                     options.acceptFileTypes = new RegExp(eval(options.acceptFileTypes))
                 }
@@ -204,6 +207,10 @@
                 } else {
                     inputContainer.show();
                 }
+            },
+            disableFileUploader: function () {
+                var inputContainer = $container.find('.upload-kit-input');
+                    inputContainer.hide();
             },
             handleEmptyValue: function () {
                 if (methods.getNumberOfFiles() > 0) {
