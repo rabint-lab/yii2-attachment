@@ -3,7 +3,7 @@
     "description": "An extension for managing ads for yii2.",
     "type": "yii2-extension",
     "homepage": "http://rabint.ir",
-    "license": "Exclusive",
+    "license": "MIT",
     "authors": [{
             "name": "rabint",
             "email": "info@rabint.ir",
@@ -12,10 +12,8 @@
     ],
     "require": {
         "rabint/base": "*",
-        "yiisoft/yii2": "^2.0",
         "intervention/image": "^2.3.2",
         "yiisoft/yii2-jui": "~2.0.0",
-        "league/url": "~3.0",
         "league/flysystem": "~1.0",
         "npm-asset/blueimp-file-upload": "*",
         "2amigos/yii2-gallery-widget": "*"
