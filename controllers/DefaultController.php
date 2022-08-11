@@ -4,20 +4,20 @@ namespace rabint\attachment\controllers;
 
 use Yii;
 use rabint\attachment\models\Attachment;
-use rabint\attachment\models\search\attachmentSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 /**
  * DefaultController implements the CRUD actions for Attachment model.
  */
-class DefaultController extends \rabint\controllers\DefaultController {
+class DefaultController extends \rabint\controllers\DefaultController
+{
 
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -29,11 +29,19 @@ class DefaultController extends \rabint\controllers\DefaultController {
         ];
     }
 
-    public function actions() {
+    public function actions()
+    {
         return [
             'file-upload' => [
                 'class' => 'rabint\attachment\actions\UploadAction',
                 'modelName' => 'rabint\attachment\models\Tmpupload',
+                'attribute' => 'attachment_id',
+                // the type of the file (`image` or `file`)
+                'type' => 'file',
+            ],
+            'file-upload-protected' => [
+                'class' => 'rabint\attachment\actions\UploadAction',
+                'modelName' => 'rabint\attachment\models\TmpuploadProtected',
                 'attribute' => 'attachment_id',
                 // the type of the file (`image` or `file`)
                 'type' => 'file',
@@ -67,34 +75,50 @@ class DefaultController extends \rabint\controllers\DefaultController {
      * This action has security problem!
      * please limit it by basePath AND ext and mime
      * /
-    public function actionPathToUrl($path = '') {
-        die('security exception');
-        if(!file_exists($path)){
-            throw new NotFoundHttpException('file not exist');
-        }
-        
-        $title = pathinfo($path,PATHINFO_BASENAME);
-        $ext = pathinfo($path,PATHINFO_EXTENSION);
-        $mime = \rabint\helpers\file::extToMime($ext);
-        header('Content-Disposition: attachment;filename=' . $title);
-        header("Content-Type: " . $mime);
-        readfile($path);
-        exit();
-    }
-    
-    */
+     * public function actionPathToUrl($path = '') {
+     * die('security exception');
+     * if(!file_exists($path)){
+     * throw new NotFoundHttpException('file not exist');
+     * }
+     *
+     * $title = pathinfo($path,PATHINFO_BASENAME);
+     * $ext = pathinfo($path,PATHINFO_EXTENSION);
+     * $mime = \rabint\helpers\file::extToMime($ext);
+     * header('Content-Disposition: attachment;filename=' . $title);
+     * header("Content-Type: " . $mime);
+     * readfile($path);
+     * exit();
+     * }
+     */
     /**
      * Displays a single Attachment model.
      * @param string $id
      * @return mixed
      */
-    public function actionDownload($id, $size = '') {
+    public function actionView($path = '')
+    {
+        if (empty($path)) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+        return $this->actionDownload(['path' => $path]);
+    }
+
+    public function actionDownload($id, $size = '')
+    {
         $model = $this->findModel($id);
+        if ($model == null) {
+            throw new \yii\web\NotFoundHttpException();
+        }
         /**
          * find path of file
          */
         if ($model->isProtected()) {
-            throw new \yii\web\ForbiddenHttpException();
+            if (\rabint\helpers\user::isGuest()) {
+                throw new \yii\web\ForbiddenHttpException();
+            }
+            if ((\rabint\helpers\user::id() != $model->user_id) && (!\rabint\helpers\user::can('administrator'))) {
+                throw new \yii\web\ForbiddenHttpException();
+            }
         }
         $path = $model->path;
         if (!empty($size)) {
@@ -116,7 +140,17 @@ class DefaultController extends \rabint\controllers\DefaultController {
         /**
          * check read file or redirect
          */
-        if (false && $model->storageObject instanceof \rabint\attachment\storages\LocalStorage) {
+        header("HTTP/1.1 200 OK");
+
+        if (\rabint\helpers\user::isGuest()) {
+            header('Content-Type: application/octet-stream');
+            //        header("Content-Type: " . $model->mime);
+            header('Content-Disposition: attachment;filename=' . $model->title);
+            redirect($model->storageObject->baseUrl() . \yii\helpers\FileHelper::normalizePath($path, '/'));
+            exit();
+        }
+
+        if ($model->storageObject instanceof \rabint\attachment\storages\LocalStorage) {
             $fullPath = $model->storageObject->uploadDir() . $path;
             /**
              * readfile or xsendfile
@@ -124,15 +158,15 @@ class DefaultController extends \rabint\controllers\DefaultController {
 //            $modules = apache_get_modules();
 //            var_dump($modules);
 //            die('--');
-            if (false AND in_array("mod_xsendfile", $modules)) {
+            if (false and in_array("mod_xsendfile", $modules)) {
                 /**
                  * xsendfile====================================================
                  * need add in htaccess
-                  <IfModule mod_xsendfile.c>
-                  XSendFile On
-                  #XSendFilePath /path/to/files/directory
-                  #XSendFileAllowAbove On
-                  </IfModule>
+                 * <IfModule mod_xsendfile.c>
+                 * XSendFile On
+                 * #XSendFilePath /path/to/files/directory
+                 * #XSendFileAllowAbove On
+                 * </IfModule>
                  */
                 header('Content-Disposition: attachment;filename=' . $model->title);
                 header("Content-Type: " . $model->mime);
@@ -147,16 +181,13 @@ class DefaultController extends \rabint\controllers\DefaultController {
                 exit();
             }
         }
-        header('Content-Type: application/octet-stream');
-//        header("Content-Type: " . $model->mime);
-        header('Content-Disposition: attachment;filename=' . $model->title);
-        redirect($model->storageObject->baseUrl() . \yii\helpers\FileHelper::normalizePath($path, '/'));
-        exit();
+
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $model = $this->findModel($id);
-        if (false and \rabint\helpers\user::id() == $model->user_id OR \rabint\helpers\user::can('administrator')) {
+        if (false and \rabint\helpers\user::id() == $model->user_id or \rabint\helpers\user::can('administrator')) {
             //todo: check file not used.
             if ($model->delete()) {
                 die('1');
@@ -166,7 +197,7 @@ class DefaultController extends \rabint\controllers\DefaultController {
         }
         die('0');
     }
-    
+
 //    public function actionDownload($id) {
 //        $model = $this->findModel($id);
 //        $file = $model->path;
@@ -182,7 +213,8 @@ class DefaultController extends \rabint\controllers\DefaultController {
      * @return Attachment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Attachment::findOne($id)) !== null) {
             return $model;
         } else {
@@ -190,7 +222,8 @@ class DefaultController extends \rabint\controllers\DefaultController {
         }
     }
 
-    public function actionScenes($id) {
+    public function actionScenes($id)
+    {
         $model = $this->findModel($id);
         $sceneDir = dirname($model->getFullPath()) . '/scene';
         $scenUrl = dirname($model->getDirectUrl()) . '/scene';
@@ -206,7 +239,8 @@ class DefaultController extends \rabint\controllers\DefaultController {
         die('');
     }
 
-    public function actionRegenerate() {
+    public function actionRegenerate()
+    {
         die('Hard Locked!');
         //error_reporting(E_ALL);
         //ini_set('display_errors', 1);
@@ -244,10 +278,10 @@ class DefaultController extends \rabint\controllers\DefaultController {
             $time_start = microtime(true);
             /* ################################################################### */
             $attachments = Attachment::find()
-                    ->where(['>', 'id', $res])
-                    ->limit(100)
-                    ->orderBy(['id' => SORT_ASC])
-                    ->all();
+                ->where(['>', 'id', $res])
+                ->limit(100)
+                ->orderBy(['id' => SORT_ASC])
+                ->all();
             if (empty($attachments)) {
                 Yii::$app->keyStorage->set('Attachment.RegenerateStatus', 'end');
                 $output .= 'Attachment Regeneration ended at:' . date('Y-m-d H:i:s') . "\n\r";

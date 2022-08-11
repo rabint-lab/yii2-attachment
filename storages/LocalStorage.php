@@ -2,6 +2,7 @@
 
 namespace rabint\attachment\storages;
 
+use rabint\helpers\uri;
 use Yii;
 use yii\helpers\FileHelper;
 use \rabint\attachment\storages\StorageAbstract;
@@ -23,7 +24,7 @@ class LocalStorage extends StorageAbstract
     public function baseUrl()
     {
         if ($this->getFile()->isProtected()) {
-            return '';
+            return uri::to(['/attachment/default/view']);
         } else {
             $base = Yii::getAlias(Yii::$app->Attachment->baseUrl);
             if (empty($base)) {
