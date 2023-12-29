@@ -45,6 +45,14 @@ class AdminController extends \rabint\controllers\AdminController {
                 return $this->redirect(\yii\helpers\Url::previous());
                 break;
 
+            case 'regenerate':
+                foreach ($selection as $attach_id) {
+                    \rabint\helpers\file::regenerateAttachment($attach_id);
+                }
+                Yii::$app->session->setFlash('success', \Yii::t('rabint', 'عملیات با موفقیت انجام شد.'));
+                return $this->redirect(\yii\helpers\Url::previous());
+                break;
+
             default:
                 break;
         }

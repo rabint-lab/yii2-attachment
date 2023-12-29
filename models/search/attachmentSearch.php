@@ -12,13 +12,14 @@ use rabint\attachment\models\Attachment;
  */
 class attachmentSearch extends Attachment
 {
+    var $page_size=20;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'user_id', 'size', 'created_at', 'updated_at', 'weight', 'protected'], 'integer'],
+            [['id', 'user_id','page_size', 'size', 'created_at', 'updated_at', 'weight', 'protected'], 'integer'],
             [['component', 'path', 'title', 'name', 'extension', 'type', 'mime', 'ip', 'meta'], 'safe'],
         ];
     }
@@ -48,9 +49,14 @@ class attachmentSearch extends Attachment
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
+//            'pagination' => [
+//                'pageSize' => , // Set the number of items per page here
+//            ],
         ]);
 
         $this->load($params);
+        $dataProvider->pagination->pageSize = $this->page_size;
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box-tools pull-right float-right">
                         <div class="input-group input-group-sm" style="width: 350px;">
                             <span class="input-group-addon bg-gray"><?= \Yii::t('rabint', 'عملیات گروهی'); ?></span>
-                            <?= Html::dropDownList('action', '', ['remove' => \Yii::t('rabint', 'حذف')], ['class' => 'form-control', 'prompt' => '']); ?>
+                            <?= Html::dropDownList('action', '', ['remove' => \Yii::t('rabint', 'حذف'),'regenerate' => \Yii::t('rabint', 'بازسازی اندازه ها')], ['class' => 'form-control', 'prompt' => '']); ?>
                             <div class="input-group-btn">
                                 <?= Html::submitButton(\Yii::t('rabint', 'اعمال'), ['class' => 'btn btn-info',]); ?>
                             </div>
