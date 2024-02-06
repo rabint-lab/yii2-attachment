@@ -187,14 +187,14 @@ class DefaultController extends \rabint\controllers\DefaultController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if (false and \rabint\helpers\user::id() == $model->user_id or \rabint\helpers\user::can('administrator')) {
-            //todo: check file not used.
-            if ($model->delete()) {
-                die('1');
-            } else {
-                die('-1');
-            }
-        }
+//        if (false and \rabint\helpers\user::id() == $model->user_id or \rabint\helpers\user::can('administrator')) {
+//            //todo: check file not used.
+//            if ($model->delete()) {
+//                die('1');
+//            } else {
+//                die('-1');
+//            }
+//        }
         die('0');
     }
 
