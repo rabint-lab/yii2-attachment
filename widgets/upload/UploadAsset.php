@@ -8,10 +8,10 @@ class UploadAsset extends AssetBundle {
 
 //        public $publishOptions = ['forceCopy' => true];
     public $css = [
-        'css/upload-kit.min.css'
+        'css/upload-kit.css'
     ];
     public $js = [
-        'js/upload-kit.min.js'
+        'js/upload-kit.js'
     ];
     public $depends = [
         'yii\web\JqueryAsset',

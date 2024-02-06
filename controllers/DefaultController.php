@@ -2,10 +2,13 @@
 
 namespace rabint\attachment\controllers;
 
-use Yii;
 use rabint\attachment\models\Attachment;
+use rabint\helpers\str;
+use Yii;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * DefaultController implements the CRUD actions for Attachment model.
@@ -196,6 +199,33 @@ class DefaultController extends \rabint\controllers\DefaultController
 //            }
 //        }
         die('0');
+    }
+
+    public function actionUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = $this->findModel($id);
+        if (
+            ( !\rabint\helpers\user::can('manager') )
+            &&
+            ( \rabint\helpers\user::id() != $model->user_id )
+        ) {
+            throw new ForbiddenHttpException('شما اجازه اصلاح اطلاعات این تصویر را ندارید');
+        }
+        $model->scenario = Attachment::SCENARIO_UPDATE_ALT;
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+                return ['err' => false,'message'];
+            }else{
+                Yii::$app->response->statusCode = 422;
+                return ['err' => true, 'message' => str::modelErrToStr($model->errors)];
+            }
+        }
+        return [
+            'id' => $model->id,
+            'alt' => $model->alt,
+            'description' => $model->description,
+        ];
     }
 
 //    public function actionDownload($id) {

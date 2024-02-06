@@ -122,6 +122,7 @@ class VirtualAttachment extends Attachment
                     [
                         'base_url' => '',
                         'delete_url' => '',
+                        'update_url' => '',
                         'path' => '',//$this->path,
                         'name' => '',//$this->name,
                         'size' => '',//$this->size,

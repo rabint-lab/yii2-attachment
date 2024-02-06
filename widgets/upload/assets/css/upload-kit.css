@@ -2,13 +2,14 @@
     float: left;
     position: relative;
     padding: 0;
-    margin: 0;
+    margin: 0
 }
+
 .upload-kit .upload-kit-input {
-    width: 150px;
+    width: 150px
 }
-.upload-kit .upload-kit-input,
-.upload-kit .upload-kit-item {
+
+.upload-kit .upload-kit-input, .upload-kit .upload-kit-item {
     position: relative;
     height: 150px;
     color: #999;
@@ -20,47 +21,44 @@
     background-size: cover;
     background-position: center center;
     background-origin: border-box;
-    list-style: none;
+    list-style: none
 }
-.upload-kit .upload-kit-input .progress,
-.upload-kit .upload-kit-item .progress,
-.upload-kit .upload-kit-input .add,
-.upload-kit .upload-kit-item .add,
-.upload-kit .upload-kit-input .remove,
-.upload-kit .upload-kit-item .remove,
-.upload-kit .upload-kit-input .download,
-.upload-kit .upload-kit-item .download{
+
+.upload-kit .upload-kit-input .add, .upload-kit .upload-kit-input .download, .upload-kit .upload-kit-input .progress, .upload-kit .upload-kit-input .remove , .upload-kit .upload-kit-input .update,
+.upload-kit .upload-kit-item .add,  .upload-kit .upload-kit-item .download,  .upload-kit .upload-kit-item  .progress, .upload-kit .upload-kit-item .remove  , .upload-kit .upload-kit-item .update
+{
     display: block;
-    position: absolute;
+    position: absolute
 }
-.upload-kit .upload-kit-input .error-popover,
-.upload-kit .upload-kit-item .error-popover {
+
+.upload-kit .upload-kit-input .error-popover, .upload-kit .upload-kit-item .error-popover {
     color: #9b0014;
     position: absolute;
     bottom: 0;
     right: 0;
     z-index: 999;
     display: none;
-    cursor: default;
+    cursor: default
 }
-.upload-kit .upload-kit-input input[type=file],
-.upload-kit .upload-kit-item input[type=file] {
+
+.upload-kit .upload-kit-input input[type=file], .upload-kit .upload-kit-item input[type=file] {
     width: 100%;
     height: 100%;
     position: absolute;
     display: block;
     opacity: 0;
     cursor: pointer;
-    z-index: 2;
+    z-index: 2
 }
-.upload-kit .upload-kit-input .drag,
-.upload-kit .upload-kit-input .add {
+
+.upload-kit .upload-kit-input .add, .upload-kit .upload-kit-input .drag {
     font-size: 3em;
     text-align: center;
     top: 50%;
     width: 100%;
-    margin-top: -0.5em;
+    margin-top: -.5em
 }
+
 .upload-kit .upload-kit-input .progress {
     position: absolute;
     top: 50%;
@@ -68,77 +66,111 @@
     margin-left: 5%;
     margin-right: 5%;
     width: 90%;
-    display: none;
+    display: none
 }
+
 .upload-kit .upload-kit-input .drag {
-    display: none;
+    display: none
 }
+
 .upload-kit .upload-kit-input.drag-highlight .add {
-    display: none;
+    display: none
 }
+
 .upload-kit .upload-kit-input.drag-highlight .drag {
-    display: block;
+    display: block
 }
+
 .upload-kit .upload-kit-input.in-progress .progress {
-    display: block;
+    display: block
 }
+
 .upload-kit .upload-kit-input.in-progress .add {
-    display: none;
+    display: none
 }
+
 .upload-kit .upload-kit-input.error .error-popover {
-    display: inline-block;
+    display: inline-block
 }
+
 .upload-kit .upload-kit-item.ui-sortable-helper .remove {
-    display: none !important;
+    display: none !important
 }
+
 .upload-kit .upload-kit-item.ui-sortable-helper .download {
-    display: none !important;
+    display: none !important
 }
+
 .upload-kit .upload-kit-item .remove {
     display: none;
     cursor: pointer;
     font-size: 3em;
     text-align: center;
-    top: 50%;
-    left: 50%;
+    top: 27%;
+    left: 25%;
     width: 50px;
     height: 50px;
     margin-left: -25px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, .8);
     padding: 4px;
     border-radius: 5px;
-    color: #FFF;
-    margin-top: -0.5em;
+    color: #fff;
+    margin-top: -.5em
 }
+
 .upload-kit .upload-kit-item .download {
     display: none;
     cursor: pointer;
     font-size: 3em;
     text-align: center;
-    top: 50%;
-    left: 50%;
+    top: 27%;
+    right: 25%;
     width: 50px;
     height: 50px;
-    margin-left: -25px;
-    background-color: rgba(0, 0, 0, 0.8);
+    margin-right: -25px;
+    background-color: rgba(0, 0, 0, .8);
     padding: 4px;
     border-radius: 5px;
-    color: #FFF;
-    margin-top: -0.5em;
+    color: #fff;
+    margin-top: -.5em
 }
+
+.upload-kit .upload-kit-item.ui-sortable-helper .update {
+    display: none !important
+}
+.upload-kit .upload-kit-item .update {
+    display: none;
+    cursor: pointer;
+    font-size: 3em;
+    text-align: center;
+    top: 63%;
+    right: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: -25px;
+    background-color: rgba(0, 0, 0, .8);
+    padding: 4px;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: -.5em
+}
+
+
 .upload-kit .upload-kit-item.image > img {
     height: 100%;
     width: auto;
-    border-radius: 7px;
+    border-radius: 7px
 }
+
 .upload-kit .upload-kit-item.not-image {
-    background-image: url('../img/file.png');
+    background-image: url(../img/file.png);
     background-size: 75%;
     background-repeat: no-repeat;
     position: relative;
     display: block;
-    width: 150px;
+    width: 150px
 }
+
 .upload-kit .upload-kit-item.not-image .name {
     text-align: center;
     text-transform: uppercase;
@@ -149,52 +181,61 @@
     width: 146px;
     color: #fff;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, .8);
     font-weight: bolder;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-radius: 0 0 7px 7px;
+    border-radius: 0 0 7px 7px
 }
+
 .upload-kit .upload-kit-item.done:hover .remove {
-    display: block;
+    display: block
 }
+
 .upload-kit .upload-kit-item.done:hover .download {
-    display: block;
+    display: block
 }
-.upload-kit:before,
-.upload-kit:after {
+
+.upload-kit .upload-kit-item.done:hover .update {
+    display: block
+}
+
+.upload-kit:after, .upload-kit:before {
     content: " ";
-    display: table;
+    display: table
 }
+
 .upload-kit:after {
-    clear: both;
+    clear: both
 }
-/* =================================================================== */
+
 .upload-kit {
-    float: none;
+    float: none
 }
+
 .upload-kit .files {
-    float: right;
-}
-.upload-kit .upload-kit-input, .upload-kit .upload-kit-item{
-    float: right;
-}
-/* =================================================================== */
-.center>.upload-kit {
-    float: none;
-    text-align: center;
-    margin: 0 auto;
+    float: right
 }
 
-.center>.upload-kit .files {
-    float: none;
-    text-align: center;
-    margin: 0 auto;
+.upload-kit .upload-kit-input, .upload-kit .upload-kit-item {
+    float: right
 }
 
-.center>.upload-kit .upload-kit-input,.center>.upload-kit .upload-kit-item{
+.center > .upload-kit {
     float: none;
     text-align: center;
-    margin: 0 auto;
+    margin: 0 auto
+}
+
+.center > .upload-kit .files {
+    float: none;
+    text-align: center;
+    margin: 0 auto
+}
+
+.center > .upload-kit .upload-kit-input, .center > .upload-kit .upload-kit-item {
+    float: none;
+    text-align: center;
+    margin: 0 auto
 }

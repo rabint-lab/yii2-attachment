@@ -27,6 +27,8 @@ use rabint\attachment\models\query\AttachmentQuery;
  * @property string $storage
  * @property string $download_count
  * @property string $meta
+ * @property string $alt
+ * @property string $description
  *
  * @property User $user
  */
@@ -103,6 +105,8 @@ class AttachmentBase extends \common\models\base\ActiveRecord {
                 [['component'], 'string', 'max' => 32],
                 [['path', 'title', 'name'], 'string', 'max' => 255],
                 [['extension'], 'string', 'max' => 10],
+                [['description'], 'string'],
+                [['alt'], 'string', 'max' => 190],
                 [['type'], 'string', 'max' => 20],
                 [['mime'], 'string', 'max' => 100],
                 [['ip'], 'string', 'max' => 48],
@@ -133,6 +137,8 @@ class AttachmentBase extends \common\models\base\ActiveRecord {
             'protected' => Yii::t('rabint', 'محافظت شده'),
             'download_count' => Yii::t('rabint', 'تعداد دانلود'),
             'meta' => Yii::t('rabint', 'متا'),
+            'alt' => Yii::t('rabint', 'عنوان'),
+            'description' => Yii::t('rabint', 'توضیحات'),
         ];
     }
 

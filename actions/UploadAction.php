@@ -239,6 +239,7 @@ class UploadAction extends Action
                 'attachment_id' => $file->id,
                 'url' => $file->storageObject->baseUrl() . $file->storageObject->path(),
                 'delete_url' => \yii\helpers\Url::to(['/attachment/default/delete', 'id' => $file->id]),
+                'update_url' => \yii\helpers\Url::to(['/attachment/default/update', 'id' => $file->id]),
             ];
         }
 
@@ -254,6 +255,7 @@ class UploadAction extends Action
 //                            'attachment_id' => $file->id,
 //                            'url' => $file->storageObject->baseUrl() . $file->storageObject->path(),
 //                            'delete_url' => \yii\helpers\Url::to(['/attachment/default/delete', 'id' => $file->id]),
+//                            'update_url' => \yii\helpers\Url::to(['/attachment/default/update', 'id' => $file->id]),
 //                        ],
 //                    ],
 //                        $this->resultFieldId => $file->id,

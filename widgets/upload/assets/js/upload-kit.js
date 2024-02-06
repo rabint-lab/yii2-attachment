@@ -1,3 +1,60 @@
+
+$(document).ready(function(){
+    $('body').on('click','#rabnitAttachmrntUpdateBtn', function () {
+        var loader = $(this).find('.loader');
+        loader.show()
+        $('#RabintEditAttachmentInfo').find('.alert-success').hide();
+        $('#RabintEditAttachmentInfo').find('.alert-danger').hide();
+
+        let altValue = $('#RabintEditAttachmentInfo').find('#update-attachment-alt').val();
+        let descriptionValue = $('#RabintEditAttachmentInfo').find('#update-attachment-description').val();
+        var url = $('#RabintEditAttachmentInfo').find('form').attr('action'); // Get the URL from the form's action attribute
+
+
+        formData = {
+            Attachment:{
+                alt: altValue,
+                description: descriptionValue
+            }
+        }
+
+        // Perform an AJAX request to send form data to the obtained URL
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                loader.hide();
+                // Show success alert and hide error alert
+                $('#RabintEditAttachmentInfo').find('.alert-success').show();
+                $('#RabintEditAttachmentInfo').find('.alert-danger').hide();
+
+                // Handle the success response from your server
+                console.log('Form data sent successfully:', response);
+                //$('#RabintEditAttachmentInfo').find('').modal('hide');
+            },
+            error: function (xhr, status, error) {
+                loader.hide();
+                try {
+                    // Attempt to parse the JSON response
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    $('#RabintEditAttachmentInfo').find('.alert-danger').html(jsonResponse.message)
+                } catch (e) {
+                }
+                // Show error alert and hide success alert
+                $('#RabintEditAttachmentInfo').find('.alert-success').hide();
+
+
+                $('#RabintEditAttachmentInfo').find('.alert-danger').show();
+
+                // Handle any errors that occur during the AJAX request
+                //console.error('Error sending form data:', error);
+            }
+        });
+    });
+});
+
 (function ($) {
     jQuery.fn.yiiUploadKit = function (options) {
         var $input = this;
@@ -32,6 +89,7 @@
                                 '</li>'
                                 );
                 $files.on('click', '.upload-kit-item .remove', methods.removeItem);
+                $files.on('click', '.upload-kit-item .update', methods.updateItem);
                 $files.on('click', '.upload-kit-item .download', methods.downloadItem);
                 methods.checkInputVisibility();
                 methods.fileuploadInit();
@@ -41,6 +99,70 @@
                 }
                 if (options.acceptFileTypes && !(options.acceptFileTypes instanceof RegExp)) {
                     options.acceptFileTypes = new RegExp(eval(options.acceptFileTypes))
+                }
+
+
+                var modalHtml = `
+                    <div class="modal fade" id="RabintEditAttachmentInfo" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="attachmentModalLabel">اطلاعات فایل</h5>
+                                    <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="image-info">
+                                        <img src="" class="img-thumbnail"  />
+                                    </div>
+                                    <form method="post" action="" >
+                                        <input type="hidden" class="attach_id" name="Attachment[id]" value="">
+                                        <div class="form-group">
+                                            <label for="update-attachment-alt">شرح:</label>
+                                            <input type="text" class="form-control" id="update-attachment-alt" name="Attachment[alt]">
+                                            <p class="hint-block">
+                                                <small>
+                                                    جهت بهینه بودن تصویر برای موتور های جستجو این فیلد را تکمیل نمایید 
+                                                </small>
+                                            </p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="update-attachment-description">توضیحات:</label>
+                                            <textarea class="form-control" id="update-attachment-description" name="Attachment[description]"></textarea>
+                                            <p class="hint-block">
+                                                <small>
+                                                    توضیحات به کاربر نمایش داده می شود.  
+                                                </small>
+                                            </p>
+                                        </div>
+                                        <div class="form-group text-center">
+                                            
+                                        </div>
+                                    </form>
+                                    <!-- Success and Error Alerts -->
+                                    <div class="alert alert-success" style="display: none;">
+                                        اطلاعات فایل با موفقیت ذخیره شد
+                                    </div>
+                                    <div class="alert alert-danger" style="display: none;">
+                                        متاسفانه هنگام ذخیره اطلاعات خطایی رخ داده است.
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">بستن</button>
+                                    <button type="button" id="rabnitAttachmrntUpdateBtn" class="btn btn-primary ">
+                                            <i class="loader fa fa-sync-alt fa-spin" style="display:none"></i> 
+                                                ذخیره
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+
+                if($('body').find('#RabintEditAttachmentInfo').length ==0){
+                    $('body').append(modalHtml);
                 }
 
             },
@@ -149,6 +271,7 @@
                 methods.handleEmptyValue();
                 methods.checkInputVisibility();
             },
+
             downloadItem: function (e) {
                 var $this = $(this);
                 var url = $this.data('url');
@@ -185,9 +308,21 @@
                     default:
                 }
                 item.append($('<span/>', {"class": "name", "title": file.name}));
-                if(options.editable)
-                        item.append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}));
-                    
+                if(options.editable){
+                    item.append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}));
+                    item.append($('<span/>', {
+                        "class": "fas fa-info-circle update",
+                        "data-url": file.update_url,
+                        "data-attachment_id": file.attachment_id,
+                        "data-path": file.path,
+                        "data-name": file.name,
+                        "data-size": file.size,
+                        "data-type": file.type,
+                        "data-order": file.order,
+                        "data-base_url": file.base_url
+                    }));
+                }
+
                 item.append($('<span/>', {"class": "fas fa-arrow-circle-down download", "data-url": '/attachment/default/download?id='+file.attachment_id}));
                 if (!file.type || file.type.search(/image\/.*/g) !== -1) {
                     item.removeClass('not-image').addClass('image');
@@ -200,6 +335,41 @@
                 }
                 return item;
             },
+
+            updateItem: function (e) {
+
+                var $this = $(this);
+                var url = $this.data('url');
+                $('#RabintEditAttachmentInfo').find('form').attr('action',$this.data('url'));
+                imgurl =  $this.data('base_url')+"/"+$this.data('path');
+
+
+                $('#RabintEditAttachmentInfo').find('.image-info img').attr('src',imgurl);
+                $('#RabintEditAttachmentInfo').find('.attach_id').attr('value',$this.data('attachment_id'));
+                $('#RabintEditAttachmentInfo').find('.alert-success').hide();
+                $('#RabintEditAttachmentInfo').find('.alert-danger').hide();
+                $('#rabnitAttachmrntUpdateBtn').find('.loader').hide();
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#RabintEditAttachmentInfo').find('#update-attachment-alt').val(response.alt);
+                        $('#RabintEditAttachmentInfo').find('#update-attachment-description').val(response.description);
+                    },
+                });
+                // "data-attachment_id": file.attachment_id,
+                // "data-path": file.path,
+                // "data-name": file.name,
+                // "data-size": file.size,
+                // "data-type": file.type,
+                // "data-order": file.order,
+                // "data-base_url": file.base_url
+
+                $('#RabintEditAttachmentInfo').modal('show');
+            },
+
             checkInputVisibility: function () {
                 var inputContainer = $container.find('.upload-kit-input');
                 if (options.maxNumberOfFiles && (methods.getNumberOfFiles() >= options.maxNumberOfFiles)) {

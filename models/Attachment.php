@@ -13,8 +13,11 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Attachment extends AttachmentBase
 {
 
+    const SCENARIO_UPDATE_ALT = 'update_alt';
+
     public $fullPath = '';
     private $storageObj = null;
+
 
     public function behaviors()
     {
@@ -31,6 +34,13 @@ class Attachment extends AttachmentBase
                 'updatedByAttribute' => false,
             ],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_UPDATE_ALT] = ['alt', 'description', 'meta'];
+        return $scenarios;
     }
 
     public function events()
@@ -161,7 +171,6 @@ class Attachment extends AttachmentBase
     }
 
 
-
     public function getUrl($size = '')
     {
         return $this->getDirectUrl($size);
@@ -232,9 +241,9 @@ class Attachment extends AttachmentBase
 
     public static function getUploaderFileAttribute($value)
     {
-        if($value=='' or $value == null) return null;
+        if ($value == '' or $value == null) return null;
         if (is_numeric($value)) {
-            
+
             $file = static::findOne($value);
             if ($file == null) {
                 return null;
@@ -243,6 +252,7 @@ class Attachment extends AttachmentBase
                 [
                     'base_url' => $file->storageObject->baseUrl(),
                     'delete_url' => \yii\helpers\Url::to(['/attachment/default/delete', 'id' => $file->id]),
+                    'update_url' => \yii\helpers\Url::to(['/attachment/default/update', 'id' => $file->id]),
                     'path' => $file->path,
                     'name' => $file->name,
                     'size' => $file->size,
@@ -262,6 +272,7 @@ class Attachment extends AttachmentBase
                     [
                         'base_url' => $file->storageObject->baseUrl(),
                         'delete_url' => \yii\helpers\Url::to(['/attachment/default/delete', 'id' => $file->id]),
+                        'update_url' => \yii\helpers\Url::to(['/attachment/default/update', 'id' => $file->id]),
                         'path' => $file->path,
                         'name' => $file->name,
                         'size' => $file->size,
@@ -279,7 +290,7 @@ class Attachment extends AttachmentBase
 
                         $return[] = [
                             'base_url' => $file->storageObject->baseUrl(),
-                            'delete_url' => \yii\helpers\Url::to(['/attachment/default/delete', 'id' => $file->id]),
+                            'update_url' => \yii\helpers\Url::to(['/attachment/default/update', 'id' => $file->id]),
                             'path' => $file->path,
                             'name' => $file->name,
                             'size' => $file->size,
@@ -529,7 +540,8 @@ class Attachment extends AttachmentBase
         $return = "id",
         $immediateConvert = false,
         $type = 'file'
-    ) {
+    )
+    {
         /**
          * init
          */
