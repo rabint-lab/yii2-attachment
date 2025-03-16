@@ -213,7 +213,7 @@ class Attachment extends AttachmentBase
 
     public function getFullPath()
     {
-        return $this->storageObject->uploadDir() . '/' . $this->path;
+        return str_replace('//','/',$this->storageObject->uploadDir() . '/' . $this->path);
     }
 
     /**
